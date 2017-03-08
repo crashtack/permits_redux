@@ -17,6 +17,7 @@ class Command(BaseCommand):
     def _save_permit_to_database(self):
         """Add a permit to the database"""
         file_path = 'media/contruction.json'
+        # file_path = GEOIP_PATH
         # permit_user = PermitUser.objects.filter(user=1).first()
 
         with open(file_path, 'r') as f:
