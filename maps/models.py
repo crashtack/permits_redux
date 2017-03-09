@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class FOO_BAR(models.Model):
@@ -14,7 +15,7 @@ class Permit(models.Model):
     A Model for the permit data.
     """
     owner = models.ForeignKey('auth.User',
-                              related_name='books',
+                              related_name='permit',
                               on_delete=models.CASCADE)
     permit_number = models.IntegerField('Permit Number', unique=True)
     master_use_permit = models.IntegerField('Master Use Permit',

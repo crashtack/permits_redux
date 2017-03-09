@@ -3,9 +3,11 @@ from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 import json
 from maps.models import Permit
+from permits_redux.settings import BASE_DIR, GEOIP_PATH
+from django.contrib.auth.models import User
 # from math import floor
 # import sys
-# import os
+import os
 # sys.path.append(os.path.join(os.environ.get('PWD', ''), 'permit_user'))
 # from permit_user.models import PermitUser
 
@@ -16,10 +18,11 @@ class Command(BaseCommand):
 
     def _save_permit_to_database(self):
         """Add a permit to the database"""
-        file_path = 'media/contruction.json'
-        # file_path = GEOIP_PATH
-        # permit_user = PermitUser.objects.filter(user=1).first()
 
+        #file_path = 'media/contruction.json'
+        file_path = os.path.join(GEOIP_PATH, 'contruction.json')
+        # permit_user = PermitUser.objects.filter(user=1).first()
+        owner = User.objects.filter(user=1).first()
         with open(file_path, 'r') as f:
             data = json.load(f)
 
@@ -33,6 +36,7 @@ class Command(BaseCommand):
 
                 permit = Permit(
                     # permit_user=permit_user,
+                    owner=owner,
                     permit_number=perm['application_permit_number'],
                     latitude=perm['latitude'],
                     longitude=perm['longitude'],
@@ -54,11 +58,11 @@ class Command(BaseCommand):
                     contractor=perm.get('contractor'),
                 )
                 try:
-                    # print("Adding permit to DB: {}".format(perm))
-                    permit.save()
+                    print("Adding permit to DB: {}".format(perm))
+                    # permit.save()
                     # print()
                 except IntegrityError:
-                    # print("Premit {} is already in the database".format(perm.get('application_permit_number')))
+                    print("Count: {} Premit {} is already in the database".format(count, perm.get('application_permit_number')))
                     pass
 
                 count += 1
@@ -80,6 +84,8 @@ class Command(BaseCommand):
     def _hello(self):
         """ Say Hello """
         print('hello\n')
+        print(BASE_DIR)
+        print(GEOIP_PATH)
 
     def handle(self, *args, **options):
         self._hello()

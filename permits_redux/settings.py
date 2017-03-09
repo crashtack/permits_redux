@@ -81,7 +81,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'permits',
+        'NAME': 'permits_redux',
         'USER': os.environ.get('USER', ''),
     }
 }
