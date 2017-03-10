@@ -1,0 +1,53 @@
+
+
+{% block head %}
+  <style>
+  #map {
+      height: 40em;
+      width: 90%;
+      max-width: 80em;
+  }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div id="detail-route" class="jumbotron">
+
+  {% if data %}
+  <div>
+    <h3>Map of Data Points:</h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var coords = [
+          {% for datum in data %}
+          {
+            lat: {{ datum.lat }},
+            lng: {{ datum.lng }},
+            title: "{{ datum.description }}"
+          },
+          {% endfor %}
+        ]
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          // center: coords[0]
+          center: {lat: 47.618217, lng:-122.351832}
+        });
+        coords.forEach(function(coord) {
+          new google.maps.Marker({
+            position: coord,
+            map: map,
+            title: coord.title,
+          });
+        });
+      }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ googleapikey }}&callback=initMap">
+    </script>
+  </div>
+  {% else %}
+    <h2>No Points in Permit Database</h2>
+  {% endif %}
+</div>
+
+{% endblock %}
